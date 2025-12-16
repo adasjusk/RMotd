@@ -1,5 +1,5 @@
 name: RMotd
-version: '1.0'
+version: '2.0'
 main: com.adasjusk.rmotd.RMotd
 author: adasjusk
 api-version: 1.21

@@ -8,13 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +31,6 @@ public class RMotd extends JavaPlugin implements Listener {
         this.miniMessage = MiniMessage.miniMessage();
         Bukkit.getPluginManager().registerEvents(this, this);
 
-        // Register commands
         if (getCommand("randommotd") != null) {
             getCommand("randommotd").setExecutor(new RandomMotdCommand(this));
         }
@@ -41,8 +38,6 @@ public class RMotd extends JavaPlugin implements Listener {
             getCommand("motd").setExecutor(new MotdCommand(this));
         }
     }
-
-    // default.properties support removed; /motd handles create <name> <motd...> and reload only
 
     @EventHandler
     public void onServerPing(ServerListPingEvent event) {
@@ -69,7 +64,6 @@ public class RMotd extends JavaPlugin implements Listener {
 
     public String getNextMotd() {
         if (motdList == null || motdList.isEmpty()) return null;
-        // simple round-robin
         if (motdIndex >= motdList.size()) motdIndex = 0;
         String m = motdList.get(motdIndex);
         motdIndex = (motdIndex + 1) % Math.max(1, motdList.size());
@@ -92,7 +86,6 @@ class RandomMotdCommand implements CommandExecutor {
             File configFile = new File(plugin.getDataFolder(), "config.yml");
             FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             boolean current = config.getBoolean("random_motd_enabled", true);
-
             if (args.length == 0) {
                 boolean newVal = !current;
                 config.set("random_motd_enabled", newVal);
@@ -111,21 +104,18 @@ class RandomMotdCommand implements CommandExecutor {
                 sender.sendMessage(invalid);
             }
         });
-
         return true;
     }
 }
 
 class MotdCommand implements CommandExecutor {
     private final RMotd plugin;
-
     MotdCommand(RMotd plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // Only allow server operators to run these commands
         if (!(sender instanceof org.bukkit.command.CommandSender) || !sender.isOp()) {
             sender.sendMessage("You must be a server operator to use this command.");
             return true;
@@ -143,19 +133,16 @@ class MotdCommand implements CommandExecutor {
                 return true;
             }
             String name = args[1];
-            // join remaining args as the motd text
             StringBuilder sb = new StringBuilder();
             for (int i = 2; i < args.length; i++) {
                 if (i > 2) sb.append(' ');
                 sb.append(args[i]);
             }
             String motdText = sb.toString();
-
             File cfgFile = new File(plugin.getDataFolder(), "config.yml");
             FileConfiguration cfg = YamlConfiguration.loadConfiguration(cfgFile);
             List<String> motds = cfg.getStringList("motds");
             if (motds == null) motds = new ArrayList<>();
-
             motds.add(motdText);
             cfg.set("motds", motds);
             try {
