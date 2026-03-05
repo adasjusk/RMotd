@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '2.0.+'
+}
+
+group = 'com.adasjusk.rmotd'
+version = '3.0'
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+neoForge {
+    version = project.neo_version
+
+    runs {
+        server {
+            server()
+        }
+    }
+
+    mods {
+        rmotd {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.neoforged.net/releases/' }
+    maven { url 'https://libraries.minecraft.net/' }
+    maven { url 'https://maven.minecraftforge.net/' }
+}
+dependencies {
+    implementation "com.mojang:brigadier:1.0.18"
+    implementation "com.google.code.gson:gson:2.10.1"
+    implementation "org.slf4j:slf4j-api:2.0.9"
+    implementation "org.slf4j:slf4j-simple:2.0.9"
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand "version": project.version
+    }
+}

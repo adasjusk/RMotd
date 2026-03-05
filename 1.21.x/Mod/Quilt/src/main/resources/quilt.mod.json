@@ -1,0 +1,31 @@
+{
+    "schema_version": 1,
+    "quilt_loader": {
+        "group": "com.adasjusk.rmotd",
+        "id": "rmotd",
+        "version": "${version}",
+        "metadata": {
+            "name": "RMotd",
+            "description": "Random MOTD mod for Quilt-based servers.",
+            "contributors": {
+                "adasjusk": "Owner"
+            },
+            "license": "MIT"
+        },
+        "intermediate_mappings": "net.fabricmc:intermediary",
+        "depends": [
+            {
+                "id": "quilt_loader",
+                "versions": ">=0.29.0"
+            },
+            {
+                "id": "quilted_fabric_api",
+                "versions": ">=11.0.0"
+            },
+            {
+                "id": "minecraft",
+                "versions": ">=1.21"
+            }
+        ]
+    }
+}

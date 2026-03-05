@@ -1,0 +1,125 @@
+/*
+ * RMotd - Root Build
+ * Available tasks:
+ *   ./gradlew buildAll       - Build every variant (including Forge)
+ *   ./gradlew cleanAll       - Clean every variant (including Forge)
+ *   ./gradlew buildMods      - Build Fabric, Forge, NeoForge, Quilt
+ *   ./gradlew buildPlugins   - Build Bukkit, Paper, Sponge
+ *   ./gradlew buildProxies   - Build BungeeCord, Velocity
+ *   ./gradlew buildForge     - Build only Forge (via its own Gradle 8.13)
+ *   ./gradlew collectJars    - Build all & copy JARs into Compiled/
+ *   ./gradlew listBuilds     - Show all included builds
+ */
+
+defaultTasks 'tasks'
+def forgeDir = file('1.21.x/Mod/Forge')
+def forgeGradlew = new File(forgeDir, 'gradlew')
+def findBuilds(String... fragments) {
+    gradle.includedBuilds.findAll { build ->
+        fragments.any { frag -> build.name.toLowerCase().contains(frag.toLowerCase()) }
+    }
+}
+tasks.register('buildForge', Exec) {
+    group = 'RMotd - Individual'
+    description = 'Builds Forge using its own Gradle 8.13 wrapper (isolated)'
+    workingDir forgeDir
+    commandLine forgeGradlew.absolutePath, 'build', '-Dorg.gradle.jvmargs=-Xmx4G'
+}
+tasks.register('cleanForge', Exec) {
+    group = 'RMotd'
+    description = 'Cleans Forge using its own Gradle 8.13 wrapper (isolated)'
+    workingDir forgeDir
+    commandLine forgeGradlew.absolutePath, 'clean'
+}
+def outputDir = file("${rootProject.projectDir}/Compiled")
+tasks.register('buildAll') {
+    group = 'RMotd'
+    description = 'Builds ALL RMotd subprojects and collects JARs into Compiled/'
+    dependsOn gradle.includedBuilds.collect { it.task(':build') }
+    dependsOn 'buildForge'
+    finalizedBy 'collectJars'
+}
+tasks.register('cleanAll') {
+    group = 'RMotd'
+    description = 'Cleans ALL RMotd subprojects (including isolated Forge) and Compiled/'
+    dependsOn gradle.includedBuilds.collect { it.task(':clean') }
+    dependsOn 'cleanForge'
+    doLast {
+        outputDir.listFiles()?.findAll { it.name.endsWith('.jar') }?.each { it.delete() }
+        println "Cleaned Compiled/ folder"
+    }
+}
+tasks.register('buildMods') {
+    group = 'RMotd'
+    description = 'Builds mod loader variants (Fabric, Forge, NeoForge, Quilt)'
+    dependsOn findBuilds('Fabric', 'NeoForge', 'Quilt').collect { it.task(':build') }
+    dependsOn 'buildForge'
+}
+tasks.register('buildPlugins') {
+    group = 'RMotd'
+    description = 'Builds server plugin variants (Bukkit, Paper, Sponge)'
+    dependsOn findBuilds('Bukkit', 'Paper', 'Sponge').collect { it.task(':build') }
+}
+tasks.register('buildProxies') {
+    group = 'RMotd'
+    description = 'Builds proxy plugin variants (BungeeCord, Velocity)'
+    dependsOn findBuilds('BungeeCord', 'Velocity').collect { it.task(':build') }
+}
+gradle.includedBuilds.each { build ->
+    def shortName = build.name.replace('RMotd-', '')
+    tasks.register("build${shortName}") {
+        group = 'RMotd - Individual'
+        description = "Builds only ${build.name}"
+        dependsOn build.task(':build')
+    }
+}
+tasks.register('collectJars', Copy) {
+    group = 'RMotd'
+    description = 'Copies all built JARs into Compiled/'
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    doFirst {
+        outputDir.mkdirs()
+        outputDir.listFiles()?.findAll { it.name.endsWith('.jar') }?.each { it.delete() }
+    }
+    gradle.includedBuilds.each { build ->
+        from("${build.projectDir}/build/libs") {
+            include '*.jar'
+            exclude '*-dev.jar', '*-sources.jar', '*-slim.jar'
+        }
+    }
+    from("${forgeDir}/build/libs") {
+        include '*.jar'
+        exclude '*-dev.jar', '*-sources.jar', '*-slim.jar'
+    }
+    into outputDir
+    doLast {
+        def jars = outputDir.listFiles()?.findAll { it.name.endsWith('.jar') }?.sort { it.name }
+        println ''
+        println '╔══════════════════════════════════════════════════════════════╗'
+        println '║                  Compiled JARs                              ║'
+        println '╠══════════════════════════════════════════════════════════════╣'
+        jars?.each { jar ->
+            printf '║  %-52s %6s ║%n', jar.name, String.format('%.0fK', jar.length() / 1024.0)
+        }
+        printf  '╠══════════════════════════════════════════════════════════════╣%n'
+        printf  '║  Total: %-50s  ║%n', "${jars?.size() ?: 0} JARs in Compiled/"
+        println '╚══════════════════════════════════════════════════════════════╝'
+        println ''
+    }
+}
+tasks.register('listBuilds') {
+    group = 'RMotd'
+    description = 'Lists all included builds and isolated builds'
+    doLast {
+        println ''
+        println '╔══════════════════════════════════════════════════╗'
+        println '║              RMotd - All Builds                  ║'
+        println '╠══════════════════════════════════════════════════╣'
+        gradle.includedBuilds.each { build ->
+            printf  '║  %-42s [composite] ║%n', build.name
+        }
+        printf      '║  %-42s [isolated]  ║%n', 'RMotd-Forge (Gradle 8.13)'
+        println '╚══════════════════════════════════════════════════╝'
+        println ''
+    }
+}

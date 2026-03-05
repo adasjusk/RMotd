@@ -1,0 +1,6 @@
+name: RMotd
+version: "3.0"
+main: com.adasjusk.rmotd.RMotdPlugin
+api-version: "1.21"
+author: adasjusk
+folia-supported: true

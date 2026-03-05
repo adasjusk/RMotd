@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+
+[[mods]]
+modId="rmotd"
+version="${version}"
+displayName="RMotd"
+description='''
+Random MOTD mod for NeoForge-based servers.
+Randomizes server MOTD from a configurable list.
+'''
+authors="adasjusk"
+
+[[dependencies.rmotd]]
+modId="neoforge"
+type="required"
+versionRange="[21.11,)"
+ordering="NONE"
+side="SERVER"
+
+[[dependencies.rmotd]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.11,)"
+ordering="NONE"
+side="SERVER"

@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.adasjusk.rmotd.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "RMotdMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

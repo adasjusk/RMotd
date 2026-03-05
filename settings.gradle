@@ -1,0 +1,14 @@
+rootProject.name = 'RMotd'
+includeBuild('1.21.x/Mod/Fabric')
+// Forge is excluded
+includeBuild('1.21.x/Mod/NeoForge')
+includeBuild('1.21.x/Mod/Quilt')
+
+// Server Plugins
+includeBuild('1.21.x/Plugin/Bukkit')
+includeBuild('1.21.x/Plugin/Paper')
+includeBuild('1.21.x/Plugin/Sponge')
+
+// Proxy Plugins
+includeBuild('1.21.x/Proxy/BungeeCord')
+includeBuild('1.21.x/Proxy/Velocity')
