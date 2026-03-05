@@ -1,9 +1,0 @@
-random_motd_enabled: true
-motds:
-  - "<gradient:red:blue>Welcome to our server!</gradient>"
-  - "<yellow>Explore the world of Minecraft with us!</yellow>"
-  - "<green>Join us and have fun!</green>"
-
-messages:
-  invalid_input: "<red>Invalid input, Please use 'true' or 'false'</red>"
-  setting_updated: "<green>Random MOTD feature updated to <status></green>"
