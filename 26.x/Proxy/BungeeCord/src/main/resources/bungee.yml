@@ -1,0 +1,5 @@
+name: RMotd
+main: com.adasjusk.rmotd.RMotd
+version: ${version}
+author: adasjusk
+description: Random MOTD plugin for BungeeCord proxies

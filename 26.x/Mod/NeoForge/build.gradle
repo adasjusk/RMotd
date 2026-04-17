@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.+'
+}
+
+group = 'com.adasjusk.rmotd'
+version = '4.0'
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
+}
+
+neoForge {
+    version = project.neo_version
+
+    runs {
+        server {
+            server()
+        }
+    }
+
+    mods {
+        rmotd {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.neoforged.net/releases/' }
+    maven { url = 'https://libraries.minecraft.net/' }
+    maven { url = 'https://maven.minecraftforge.net/' }
+}
+dependencies {
+    implementation "com.mojang:brigadier:1.0.18"
+    implementation "com.google.code.gson:gson:2.10.1"
+    implementation "org.slf4j:slf4j-api:2.0.9"
+    implementation "org.slf4j:slf4j-simple:2.0.9"
+
+    // Fallback for IDE classpath resolution when moddev artifact generation is interrupted.
+    def ideFallbackJars = [
+            file("$buildDir/moddev/artifacts/neoforge-${project.neo_version}.jar"),
+            file("$buildDir/moddev/artifacts/minecraft-patched-${project.neo_version}.jar"),
+            file("$buildDir/moddev/artifacts/minecraft-patched-${project.neo_version}-merged.jar")
+    ].findAll { it.exists() }
+    if (!ideFallbackJars.isEmpty()) {
+        compileOnly files(ideFallbackJars)
+    }
+}
+
+def props = [version: project.version]
+processResources {
+    inputs.properties props
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand props
+    }
+}

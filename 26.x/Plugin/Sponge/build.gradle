@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'org.spongepowered.gradle.plugin' version '2.2.0'
+}
+group = 'com.adasjusk.rmotd'
+version = '4.0'
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+repositories {
+    mavenCentral()
+}
+sponge {
+    apiVersion("18.0.0-SNAPSHOT")
+    license("MIT")
+    plugin("rmotd") {
+        loader {
+            name("java_plain")
+            version("1.0")
+        }
+        displayName("RMotd")
+        version(project.version.toString())
+        entrypoint("com.adasjusk.rmotd.RMotd")
+        description("Random MOTD plugin for Sponge")
+        contributor("adasjusk") {
+            description("Author")
+        }
+    }
+}
+dependencies {
+    implementation 'org.spongepowered:spongeapi:18.0.0-SNAPSHOT'
+}

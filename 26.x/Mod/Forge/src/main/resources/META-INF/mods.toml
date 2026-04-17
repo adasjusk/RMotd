@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[64,)"
+license="MIT"
+
+[[mods]]
+modId="rmotd"
+version="${version}"
+displayName="RMotd"
+description='''
+Random MOTD mod for Forge-based servers.
+Random server MOTD from a configurable list.
+'''
+authors="adasjusk"
+
+[[dependencies.rmotd]]
+modId="forge"
+mandatory=true
+versionRange="[64,)"
+ordering="NONE"
+side="SERVER"
+
+[[dependencies.rmotd]]
+modId="minecraft"
+mandatory=true
+versionRange="[26.1.2,)"
+ordering="NONE"
+side="SERVER"

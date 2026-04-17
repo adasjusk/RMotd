@@ -6,14 +6,17 @@
  *   ./gradlew buildMods      - Build Fabric, Forge, NeoForge, Quilt
  *   ./gradlew buildPlugins   - Build Bukkit, Paper, Sponge
  *   ./gradlew buildProxies   - Build BungeeCord, Velocity
- *   ./gradlew buildForge     - Build only Forge (via its own Gradle 8.13)
+ *   ./gradlew buildForge     - Build only Forge (via its own Gradle 9.3.1)
  *   ./gradlew collectJars    - Build all & copy JARs into Compiled/
  *   ./gradlew listBuilds     - Show all included builds
  */
 
 defaultTasks 'tasks'
-def forgeDir = file('1.21.x/Mod/Forge')
+def forgeDir = file('26.x/Mod/Forge')
 def forgeGradlew = new File(forgeDir, 'gradlew')
+def forgeJavaHome = providers.gradleProperty('forgeJavaHome')
+    .orElse(System.getenv('FORGE_JAVA_HOME') ?: '/usr/lib/jvm/java-25-openjdk')
+    .get()
 def findBuilds(String... fragments) {
     gradle.includedBuilds.findAll { build ->
         fragments.any { frag -> build.name.toLowerCase().contains(frag.toLowerCase()) }
@@ -21,14 +24,18 @@ def findBuilds(String... fragments) {
 }
 tasks.register('buildForge', Exec) {
     group = 'RMotd - Individual'
-    description = 'Builds Forge using its own Gradle 8.13 wrapper (isolated)'
+    description = 'Builds Forge using its own Gradle 9.3.1 wrapper (isolated)'
     workingDir forgeDir
+    environment 'JAVA_HOME', forgeJavaHome
+    environment 'PATH', "${forgeJavaHome}/bin:${System.getenv('PATH')}"
     commandLine forgeGradlew.absolutePath, 'build', '-Dorg.gradle.jvmargs=-Xmx4G'
 }
 tasks.register('cleanForge', Exec) {
     group = 'RMotd'
-    description = 'Cleans Forge using its own Gradle 8.13 wrapper (isolated)'
+    description = 'Cleans Forge using its own Gradle 9.3.1 wrapper (isolated)'
     workingDir forgeDir
+    environment 'JAVA_HOME', forgeJavaHome
+    environment 'PATH', "${forgeJavaHome}/bin:${System.getenv('PATH')}"
     commandLine forgeGradlew.absolutePath, 'clean'
 }
 def outputDir = file("${rootProject.projectDir}/Compiled")
@@ -118,7 +125,7 @@ tasks.register('listBuilds') {
         gradle.includedBuilds.each { build ->
             printf  '║  %-42s [composite] ║%n', build.name
         }
-        printf      '║  %-42s [isolated]  ║%n', 'RMotd-Forge (Gradle 8.13)'
+        printf      '║  %-42s [isolated]  ║%n', 'RMotd-Forge (Gradle 9.3.1)'
         println '╚══════════════════════════════════════════════════╝'
         println ''
     }

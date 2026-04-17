@@ -1,0 +1,11 @@
+random_motd_enabled: true
+motds:
+  - "&c&lWelcome &b&lto our server!"
+  - "&eExplore the world of Minecraft with us!"
+  - "&aJoin us and have fun!"
+
+messages:
+  invalid_input: "&cInvalid input"
+  setting_updated: "&aRandom MOTD feature updated to %s"
+  enabled: "enabled"
+  disabled: "disabled"
