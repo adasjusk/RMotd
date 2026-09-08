@@ -1,15 +1,15 @@
-# 🎲 RMotd
+# RMotd
 
 A small Minecraft server plugin to serve rotating MOTDs (Message of the Day) and let server operators manage MOTDs at runtime.
 
-# 🤑 Features
+# Features
 
 - Rotating MOTDs from `config.yml` (round-robin).
 - `/randommotd` command: toggle random-rotation on/off.
 - `/motd create <name> <motd...>` command: add a new MOTD to `config.yml` at runtime.
 - `/motd reload` command: reloads the `config.yml`.
 
-# 🖌️ Configuration
+# Configuration
 
 ```yaml
 random_motd_enabled: true
@@ -23,7 +23,7 @@ messages:
   setting_updated: "<green>Random MOTD feature updated to <status></green>"
 ```
 
-# 🕹️ Commands
+# Commands
 
 - `/randommotd` — Toggle random MOTD rotation (reads/writes `random_motd_enabled` in `config.yml`).
   - Permission: `rmod.randommotd` (declared in `plugin.yml`).
@@ -34,7 +34,7 @@ messages:
 
 - `/motd reload` — Reloads `config.yml` from disk. Operator-only.
 
-# 🎭 Permissions
+# Permissions
 
 - `rmod.randommotd` — used for the `randommotd` command.
 - `rmod.motd` — reserved for `/motd` (plugin.yml documents it). Currently the plugin enforces operator-only usage for `/motd`; if you prefer permissions, change the check to `sender.hasPermission("rmod.motd")` in `MotdCommand`.
