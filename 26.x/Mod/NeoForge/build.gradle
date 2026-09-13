@@ -36,8 +36,8 @@ repositories {
 dependencies {
     implementation "com.mojang:brigadier:1.0.18"
     implementation "com.google.code.gson:gson:2.14.0"
-    implementation "org.slf4j:slf4j-api:2.0.18"
-    implementation "org.slf4j:slf4j-simple:2.0.18"
+    implementation "org.slf4j:slf4j-api:2.0.19"
+    implementation "org.slf4j:slf4j-simple:2.0.19"
 
     // Fallback for IDE classpath resolution when moddev artifact generation is interrupted.
     def ideFallbackJars = [
