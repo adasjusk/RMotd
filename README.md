@@ -25,4 +25,4 @@ messages:
 # Support
 - Minecraft version: 1.21.x-26.3
 - Loaders: Bukkit BungeeCord Fabric Folia Forge NeoForge Paper Purpur Quilt Spigot Sponge Velocity
-- Made by human and then patched by ai ✨
+- Made by human and then patched by AI ✨
