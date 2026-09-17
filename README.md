@@ -1,13 +1,12 @@
-# RMotd
+# RMotd plugin
 
-A small Minecraft server plugin to serve rotating MOTDs (Message of the Day) and let server operators manage MOTDs at runtime.
+A small Minecraft server plugin to show random MOTDs (Message(Text) of the Day) and let server operators manage MOTDs at configuration file.
 
-# Features
-
+# Commands
 - Rotating MOTDs from `config.yml` (round-robin).
-- `/randommotd` command: toggle random-rotation on/off.
-- `/motd create <name> <motd...>` command: add a new MOTD to `config.yml` at runtime.
-- `/motd reload` command: reloads the `config.yml`.
+- `/randommotd` command: toggle random-rotation on/off. Requires rmod.randommotd permission
+- `/motd create <name> <motd...>` command: add a new MOTD to `config.yml` at run time. 
+- `/motd reload` command: reloads the `config.yml`. Requires rmod.motd permission
 
 # Configuration
 
@@ -23,19 +22,7 @@ messages:
   setting_updated: "<green>Random MOTD feature updated to <status></green>"
 ```
 
-# Commands
-
-- `/randommotd` — Toggle random MOTD rotation (reads/writes `random_motd_enabled` in `config.yml`).
-  - Permission: `rmod.randommotd` (declared in `plugin.yml`).
-
-- `/motd create <name> <motd...>` — Add a MOTD entry to `motds` in `config.yml` and save it. The `<name>` is used only in the confirmation message currently. Provide the MOTD content as remaining args.
-  - Example: `/motd create welcome <green>Welcome to our server!</green>`
-  - Operator-only by default (only ops or console can run it). If you prefer permission-based control, see Permissions below.
-
-- `/motd reload` — Reloads `config.yml` from disk. Operator-only.
-
-# Permissions
-
-- `rmod.randommotd` — used for the `randommotd` command.
-- `rmod.motd` — reserved for `/motd` (plugin.yml documents it). Currently the plugin enforces operator-only usage for `/motd`; if you prefer permissions, change the check to `sender.hasPermission("rmod.motd")` in `MotdCommand`.
-
+# Support
+- Minecraft version: 1.21.x-26.3
+- Loaders: Bukkit BungeeCord Fabric Folia Forge NeoForge Paper Purpur Quilt Spigot Sponge Velocity
+- Made by human and then patched by ai ✨
