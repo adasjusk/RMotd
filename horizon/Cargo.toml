@@ -1,0 +1,12 @@
+[package]
+name = "rmotd"
+version = "1.0.0"
+edition = "2024"
+license = "CC-BY-SA-4.0"
+publish = false
+
+[lib]
+path = "mixins/rmotd/runtime.rs"
+
+[dependencies]
+serde_json = "1"

@@ -1,0 +1,51 @@
+[mod]
+id = "rmotd"
+version = "1.0.0"
+priority = 100
+
+# motd.rs writes private field of Shared
+[compatibility]
+horizon_revision = "d91cab68ded29bd2b004f7050c468fb98c41a00b"
+
+[[module]]
+id = "runtime"
+file = "crates/horizon-client/src/game.rs"
+name = "rmotd"
+source = "runtime.rs"
+
+[[module]]
+id = "motd"
+file = "crates/horizon-client/src/lan/mod.rs"
+name = "rmotd_motd"
+source = "motd.rs"
+visibility = "pub"
+
+[[injection]]
+id = "register"
+kind = "HEAD"
+target = "horizon_client::game::native_hooks::Game<'_>::native_register_commands"
+helper = "register.rs"
+bindings = [
+  { name = "commands", ty = "&mut Vec<crate::game::native_server::NativeCommand>", value = "&mut *commands" },
+]
+
+[[injection]]
+id = "command"
+kind = "HEAD"
+target = "horizon_client::game::native_hooks::Game<'_>::native_perform_command"
+helper = "command.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "command", ty = "&str", value = "command" },
+  { name = "ran", ty = "&mut bool", value = "&mut *ran" },
+]
+
+[[injection]]
+id = "tick"
+kind = "HEAD"
+target = "horizon_client::game::native_hooks::Game<'_>::native_server_tick"
+helper = "tick.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "phase", ty = "crate::game::native_lifecycle::ServerTickPhase", value = "phase" },
+]

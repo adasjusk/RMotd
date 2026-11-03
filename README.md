@@ -21,6 +21,11 @@ messages:
   invalid_input: "<red>Invalid input, Please use 'true' or 'false'</red>"
   setting_updated: "<green>Random MOTD feature updated to <status></green>"
 ```
+# Horizon
+
+`horizon/` is a native mod for [Horizon](https://playhorizon.dev/docs/make-a-mod)
+- `/randommotd`, `/motd reload`, `/motd create <name> <motd...>` - operator level 2.
+Config: `config/rmotd.json`, the Fabric build's file.
 
 # Support
 - Minecraft version: 1.21.x-26.3
