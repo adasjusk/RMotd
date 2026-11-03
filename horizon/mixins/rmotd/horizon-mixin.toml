@@ -3,7 +3,7 @@ id = "rmotd"
 version = "1.0.0"
 priority = 100
 
-# motd.rs writes a private field of Shared, so check each new Nightly.
+# motd.rs writes private field of Shared
 [compatibility]
 horizon_revision = "d91cab68ded29bd2b004f7050c468fb98c41a00b"
 
@@ -13,7 +13,6 @@ file = "crates/horizon-client/src/game.rs"
 name = "rmotd"
 source = "runtime.rs"
 
-# Shared.motd has no setter, but a child module of lan may write it.
 [[module]]
 id = "motd"
 file = "crates/horizon-client/src/lan/mod.rs"

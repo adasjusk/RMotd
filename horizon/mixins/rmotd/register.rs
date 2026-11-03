@@ -1,4 +1,4 @@
-// RMotd's commands for operators of level 2.
+// commands for ops
 fn rmotd_register(commands: &mut Vec<crate::game::native_server::NativeCommand>) {
     use crate::game::{native_server::NativeCommand, rmotd as m};
     m::start(crate::game::Game::native_config_dir().ok().as_deref());

@@ -1,4 +1,3 @@
-// End of each server tick: the next MOTD on the LAN host, when it is time.
 fn rmotd_tick(
     game: &mut crate::game::Game<'_>,
     phase: crate::game::native_lifecycle::ServerTickPhase,

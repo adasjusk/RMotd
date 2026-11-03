@@ -1,10 +1,8 @@
-// /randommotd, /motd reload and /motd create <name> <motd>.
+// /randommotd, /motd reload and /motd create <name> <motd>
 fn rmotd_command(game: &mut crate::game::Game<'_>, command: &str, ran: &mut bool) {
     use crate::game::rmotd as m;
     use horizon_client::text::Text;
-    if *ran {
-        return;
-    }
+    if *ran { return; }
     let mut words = command.splitn(4, ' ');
     let answer = match (words.next(), words.next(), words.next(), words.next()) {
         (Some("randommotd"), None, ..) => m::toggle(),

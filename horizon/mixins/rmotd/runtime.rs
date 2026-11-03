@@ -1,9 +1,9 @@
-// RMotd for Horizon, the module crate::game::rmotd and the Cargo library for cargo test.
+// rmotd in horizon
 use serde_json::{Value, json};
 use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 
-/// Ticks between two MOTDs, as the Fabric build.
+/// ticks between two motds
 pub const ROTATION_TICKS: u32 = 200;
 
 struct State {
@@ -22,7 +22,7 @@ thread_local! {
     });
 }
 
-/// The Fabric build's config/rmotd.json.
+/// fabric build config/rmotd.json.
 fn defaults() -> Value {
     json!({
         "randomMotdEnabled": true,
@@ -40,7 +40,6 @@ fn defaults() -> Value {
     })
 }
 
-/// Reads the file, writing the defaults when it is missing.
 fn read(path: &Path) -> Value {
     match std::fs::read_to_string(path) {
         Ok(text) => serde_json::from_str(&text).unwrap_or_else(|_| defaults()),
@@ -48,9 +47,7 @@ fn read(path: &Path) -> Value {
             let config = defaults();
             write(path, &config);
             config
-        }
-    }
-}
+}   }   }
 
 fn write(path: &Path, config: &Value) {
     let text = serde_json::to_string_pretty(config).unwrap_or_default();
@@ -67,7 +64,7 @@ fn message(config: &Value, key: &str) -> String {
         .unwrap_or_else(|| defaults()["messages"][key].as_str().unwrap_or_default().to_owned())
 }
 
-/// A world opens: read config/ (`dir`) and show the first MOTD at once.
+/// world opens read config and show the first MOTD at once
 pub fn start(dir: Option<&Path>) {
     let path = dir.map(|d| d.join("rmotd.json"));
     let config = path.as_deref().map_or_else(defaults, read);
@@ -85,7 +82,7 @@ pub fn reload() -> String {
     "Config reloaded.".into()
 }
 
-/// /randommotd: flips rotation and keeps it.
+/// flips rotation and keeps it
 pub fn toggle() -> String {
     STATE.with(|s| {
         let mut s = s.borrow_mut();
@@ -102,7 +99,7 @@ pub fn toggle() -> String {
     })
 }
 
-/// /motd create <name> <motd>: adds it to the list and keeps it.
+/// /motd create <name> <motd> adds it to the list and keeps it.
 pub fn create(name: &str, motd: &str) -> String {
     STATE.with(|s| {
         let mut s = s.borrow_mut();
@@ -119,7 +116,8 @@ pub fn create(name: &str, motd: &str) -> String {
     format!("Created MOTD '{name}' and saved to config.")
 }
 
-/// The next MOTD every ROTATION_TICKS while rotation is on.
+/// next motd every some "ROTATION_TICKS" while rotation is on.
+/// lgtm
 pub fn tick() -> Option<String> {
     STATE.with(|s| {
         let mut s = s.borrow_mut();
@@ -138,7 +136,7 @@ pub fn tick() -> Option<String> {
     })
 }
 
-/// `&c` to `§c`, for the codes Minecraft knows.
+/// `&c` to `§c`, codes mc knows, or this rusty thing
 pub fn colors(text: &str) -> String {
     let mut out = String::with_capacity(text.len());
     let mut chars = text.chars().peekable();
@@ -176,7 +174,6 @@ mod tests {
         assert_eq!(toggle(), "Random MOTD feature updated to disabled");
         assert!((0..ROTATION_TICKS * 2).all(|_| tick().is_none()));
         create("x", "&aNew");
-        // Kept on disk: a reload still has it and stays off.
         reload();
         assert_eq!(toggle(), "Random MOTD feature updated to enabled");
         let shown: Vec<String> = (0..ROTATION_TICKS * 4).filter_map(|_| tick()).collect();

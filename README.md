@@ -21,20 +21,13 @@ messages:
   invalid_input: "<red>Invalid input, Please use 'true' or 'false'</red>"
   setting_updated: "<green>Random MOTD feature updated to <status></green>"
 ```
+# Horizon
+
+`horizon/` is a native mod for [Horizon](https://playhorizon.dev/docs/make-a-mod)
+- `/randommotd`, `/motd reload`, `/motd create <name> <motd...>` - operator level 2.
+Config: `config/rmotd.json`, the Fabric build's file.
 
 # Support
 - Minecraft version: 1.21.x-26.3
 - Loaders: Bukkit BungeeCord Fabric Folia Forge NeoForge Paper Purpur Quilt Spigot Sponge Velocity
 - Made by human and then patched by AI ✨
-
-# Horizon
-
-`horizon/` is a native mod for [Horizon](https://playhorizon.dev/docs/make-a-mod) (26.3). It rotates the
-MOTD of a world opened to LAN every 10 seconds (Horizon's dedicated server can't build native mods yet,
-the LAN broadcast keeps the first MOTD, the server list ping shows the rotation).
-
-- `/randommotd`, `/motd reload`, `/motd create <name> <motd...>` - operator level 2.
-
-Config: `config/rmotd.json`, the Fabric build's file. MOTDs take `&` colour codes, not MiniMessage tags.
-It writes a private field of Horizon's LAN server, so check it on each Nightly:
-`python3 native/tools/native.py check /path/to/RMotd/horizon --horizon latest`.
